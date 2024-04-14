@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:to_do/model/task.dart';
 
 class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({super.key});
+  const AddTaskPage({super.key, required this.onAdd});
+
+  final void Function(Task newTask) onAdd;
 
   @override
   State<AddTaskPage> createState() => _AddTaskPageState();

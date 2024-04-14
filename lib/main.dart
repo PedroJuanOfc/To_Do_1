@@ -18,13 +18,32 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   List<Task> tasks = [];
 
+  void addTask(Task newTask) {
+    setState(() {
+      if (tasks.contains(newTask)) return;
+      tasks.add(newTask);
+    });
+  }
+
+  void removeTask(Task task) {
+    setState(() {
+      if (!tasks.contains(task)) return;
+      tasks.remove(task);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: AppRoutes.home,
       routes: {
-        AppRoutes.home: (context) => TaskListPage(tasks: tasks),
-        AppRoutes.add: (context) => const AddTaskPage()
+        AppRoutes.home: (context) => TaskListPage(
+              tasks: tasks,
+              onRemove: removeTask,
+            ),
+        AppRoutes.add: (context) => AddTaskPage(
+              onAdd: addTask,
+            )
       },
     );
   }

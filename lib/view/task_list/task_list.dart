@@ -3,21 +3,20 @@
 import 'package:flutter/material.dart';
 import 'package:to_do/model/task.dart';
 import 'package:to_do/routes.dart';
-import 'package:intl/intl.dart';
+import 'package:to_do/view/task_list/delete_task_modal.dart';
+import 'package:to_do/view/task_list/task_card.dart';
 
 class TaskListPage extends StatefulWidget {
-  TaskListPage({super.key, required this.tasks});
+  TaskListPage({super.key, required this.tasks, required this.onRemove});
 
   List<Task> tasks;
-  final DateFormat dateFormatter = DateFormat('dd-MM-yyyy HH:mm');
+  final void Function(Task task) onRemove;
 
   @override
   State<TaskListPage> createState() => _TaskListPageState();
 }
 
 class _TaskListPageState extends State<TaskListPage> {
-  String formatDate(DateTime date) => widget.dateFormatter.format(date);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,10 +31,19 @@ class _TaskListPageState extends State<TaskListPage> {
               itemCount: widget.tasks.length,
               itemBuilder: (context, index) {
                 final task = widget.tasks[index];
-                return ListTile(
-                  key: Key(task.id),
-                  leading: Text(task.title),
-                  subtitle: Text(formatDate(task.dueTo)),
+                final taskKey = Key(task.id);
+                return Dismissible(
+                  direction: DismissDirection.endToStart,
+                  onDismissed: (direction) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const DeleteTaskModal(),
+                    ).then((mustDelete) {
+                      if (mustDelete) widget.onRemove(task);
+                    });
+                  },
+                  key: taskKey,
+                  child: TaskCard(task: task),
                 );
               },
             ),
