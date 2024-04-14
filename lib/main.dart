@@ -35,6 +35,7 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.home,
       routes: {
         AppRoutes.home: (context) => TaskListPage(
