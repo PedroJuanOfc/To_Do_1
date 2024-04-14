@@ -1,18 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:to_do/model/task.dart';
 import 'package:to_do/util/date_formatter.dart';
+import 'package:to_do/view/task_list/delete_task_modal.dart';
 
 class TaskCard extends StatelessWidget {
-  const TaskCard({required this.task, super.key});
+  const TaskCard({required this.task, super.key, required this.onRemove});
 
   final Task task;
+  final void Function(Task task) onRemove;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    final theme = Theme.of(context);
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      color: task.status.color,
       key: Key('${task.id}tile'),
-      leading: Text(task.title),
-      subtitle: Text(DateFormatter.formatDate(task.dueTo)),
+      child: Column(
+        children: [
+          Text(
+            task.title,
+            style: theme.textTheme.headlineLarge,
+          ),
+          Text(DateFormatter.formatDate(task.dueTo)),
+          Text(task.status.name),
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => const DeleteTaskModal(),
+                ).then((mustDelete) {
+                  if (mustDelete) onRemove(task);
+                });
+              },
+              icon: const Icon(Icons.delete))
+        ],
+      ),
     );
   }
 }

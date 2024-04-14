@@ -16,7 +16,32 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  List<Task> tasks = [];
+  List<Task> tasks = [
+    Task(
+      id: '1',
+      title: 'Create a new project',
+      status: TaskStatus.done,
+      dueTo: DateTime.now().add(const Duration(days: 1)),
+    ),
+    Task(
+      id: '2',
+      title: 'Create models',
+      status: TaskStatus.done,
+      dueTo: DateTime.now().add(const Duration(days: 2)),
+    ),
+    Task(
+      id: '3',
+      title: 'Build form',
+      status: TaskStatus.doing,
+      dueTo: DateTime.now().add(const Duration(days: 3)),
+    ),
+    Task(
+      id: '4',
+      title: 'Deploy',
+      status: TaskStatus.toDo,
+      dueTo: DateTime.now().add(const Duration(days: 4)),
+    ),
+  ];
 
   void addTask(Task newTask) {
     setState(() {
