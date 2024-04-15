@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do/model/task.dart';
+import 'package:to_do/provider/task_provider.dart';
 import 'package:to_do/util/date_formatter.dart';
 
 class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({super.key, required this.onAdd});
-
-  final void Function(Task newTask) onAdd;
+  const AddTaskPage({super.key,});
 
   @override
   State<AddTaskPage> createState() => _AddTaskPageState();
@@ -27,17 +27,21 @@ class _AddTaskPageState extends State<AddTaskPage> {
         showError('Must have a due date');
         return;
       }
+      
       if (selectedStatus == null) {
         showError('Must have a status');
         return;
       }
+
       final newTask = Task(
         id: Random().nextInt(10000).toString(),
         title: titleController.text,
         status: selectedStatus!,
         dueTo: selectedDate!,
       );
-      widget.onAdd(newTask);
+
+      Provider.of<TaskProvider>(context, listen: false).addTask(newTask);
+
       Navigator.of(context).pop();
     }
   }
