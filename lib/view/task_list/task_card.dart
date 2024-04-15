@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do/model/task.dart';
+import 'package:to_do/provider/task_provider.dart';
 import 'package:to_do/util/date_formatter.dart';
 import 'package:to_do/view/task_list/delete_task_modal.dart';
 
@@ -30,7 +32,9 @@ class TaskCard extends StatelessWidget {
                   context: context,
                   builder: (context) => const DeleteTaskModal(),
                 ).then((mustDelete) {
-                  if (mustDelete) onRemove(task);
+                  if (mustDelete) {
+                    Provider.of<TaskProvider>(context, listen: false).delete(task);
+                  }
                 });
               },
               icon: const Icon(Icons.delete))
